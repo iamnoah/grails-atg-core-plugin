@@ -23,7 +23,7 @@ grails.project.dependency.resolution = {
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
 	def repo = new AbstractRepository() {
 		
-		final ORG = 'ATG-MODULE'
+		final ORG = 'ATG_MODULE'
 		
 		File atg_root
 		
@@ -37,6 +37,7 @@ grails.project.dependency.resolution = {
 			default_jar = default_jar ?: createDefaultJar()
 		}
 		
+		def resources = [:]
 		
 		protected File createDefaultJar() {
 			Jar task = new Jar()
@@ -61,7 +62,6 @@ grails.project.dependency.resolution = {
 					root = root.parentFile
 				}
 			}
-			println "ATG root dir is ${root.absolutePath}"
 			root
 		}
 		
@@ -80,17 +80,22 @@ grails.project.dependency.resolution = {
 				}
 			}
 			fireTransferInitiated(r,5)
+			fireTransferStarted()
 			
 			new URL(src).withInputStream { ins ->
 				dest.withOutputStream { out -> out << ins }
 			}
-			fireTransferCompleted()
+			fireTransferProgress(dest.size())
+			fireTransferCompleted(dest.size())
 		}
 		
 		@Override
 		public Resource getResource(String src) throws IOException {
+			if(resources[src]) {
+				return resources[src]
+			}
 			if(src == 'default-jar') {
-				new BuiltFileResource(defaultJar)
+				return new BuiltFileResource(defaultJar)
 			}
 			def (org,module,ver,type) = (src.split(/:/) as List)
 			if(org != ORG) {
@@ -110,8 +115,14 @@ grails.project.dependency.resolution = {
 								status: 'release',
 								'default': 'true',
 								)
+						build.configurations() {
+							conf(name:"default",visibility:"public")
+						}
+						build.publications() {
+							artifact(name:module,type:"jar",ext:"jar",conf:"default")
+						}
 						build.dependencies {
-							file.withReader { 
+							file.withReader {
 								Manifest m = new Manifest(it)
 								def val = m.getMainSection().getAttributeValue("ATG-Required")
 								val?.split(/\s+/)?.findAll { it }?.each {
@@ -119,16 +130,10 @@ grails.project.dependency.resolution = {
 								}
 							}
 						}
-						build.configurations() {
-							conf(name:"default",visibility:"public")
-						}
-						build.publications() {
-							artifact(name:module,type:"jar",ext:"jar",conf:"default")
-						}
 					}
 					it.close()
 				}
-				new BuiltFileResource(tmp)
+				resources[src] = new BuiltFileResource(tmp)
 			} else if(file.exists()){
 				File jar = new File(atgRoot,"${module}/lib/classes.jar")
 				if(jar.exists()) {
@@ -172,6 +177,6 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.13'
-		provided( [group:'ATG-MODULE',name:'DAS',version:'SNAPSHOT'] )
+		provided( [group:'ATG_MODULE',name:'DAS',version:'SNAPSHOT'] )
     }
 }

@@ -14,7 +14,7 @@ class AtgCoreGrailsPlugin {
 	
 	def author = "Noah Sloan"
 	def authorEmail = ""
-	def title = "ATG Core Grails PLugin"
+	def title = "ATG Core Grails Plugin"
 	def description = '''\\
 Plugin for creating Grails applications that utilize the ATG Core.
 e.g., Nucleus, Repositories, and the DSP taglib.   
