@@ -1,5 +1,5 @@
 This plugin enables you to create a Grails project that utilizes the ATG Core 
-as part of your ATG application. 
+as part of your ATG application.
 
 ## Dependencies
 
@@ -41,5 +41,9 @@ wont have to use DSP tags. However, the full DSP tag library can be used in your
 	<%@ taglib prefix="dsp" uri="/dspTaglib" %>
 	<dsp:page>
 		...
+
+Note that when the plugin is installed it tries to copy dspjspTaglib1_0.tld 
+from your ATG install to web-app/WEB-INF/tld/. If for some reason it is not 
+successful, you will have to copy it yourself.
 
 [atg-ivy-resolver]: https://github.com/iamnoah/atg-ivy-resolver
