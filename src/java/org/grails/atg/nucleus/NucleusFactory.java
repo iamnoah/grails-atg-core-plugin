@@ -2,17 +2,11 @@ package org.grails.atg.nucleus;
 
 import java.io.IOException;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 
-import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.web.context.request.RequestContextHolder;
 
-import atg.servlet.DynamoHttpServletRequest;
-import atg.servlet.ServletUtil;
+import atg.nucleus.spring.NucleusResolverUtil;
 
 /**
  * FactoryBean for bringing Nucleus components into Spring.
@@ -25,10 +19,6 @@ import atg.servlet.ServletUtil;
  */
 public class NucleusFactory implements FactoryBean<Object> {
 
-	private static GrailsWebRequest getGWR() {
-		return ((GrailsWebRequest)RequestContextHolder.currentRequestAttributes());
-	}
-	
 	private String componentName;
 	
 	private Class<?> componentType = Object.class;
@@ -74,13 +64,7 @@ public class NucleusFactory implements FactoryBean<Object> {
 	 * @throws ServletException
 	 */
 	static <T> T getComponent(String name, Class<T> expectedClass) throws IOException, ServletException {
-		GrailsWebRequest gwr = getGWR();
-		ServletContext context = gwr.getServletContext();
-		ServletRequest request = gwr.getCurrentRequest();
-		ServletResponse response= gwr.getCurrentResponse();
-		DynamoHttpServletRequest dynamoRequest = ServletUtil.getDynamoRequest(context, request, response);
-		
-		return expectedClass.cast(dynamoRequest.resolveName(name));
+		return expectedClass.cast(NucleusResolverUtil.resolveName(name));
 	}
 
 	@Override
