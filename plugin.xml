@@ -1,6 +1,6 @@
 <plugin name='atg-core' version='0.1' grailsVersion='1.3.6 &gt; *'>
   <author>Noah Sloan</author>
-  <title>ATG Core Grails PLugin</title>
+  <title>ATG Core Grails Plugin</title>
   <description>\
 Plugin for creating Grails applications that utilize the ATG Core.
 e.g., Nucleus, Repositories, and the DSP taglib.   

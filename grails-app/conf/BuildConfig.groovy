@@ -1,3 +1,7 @@
+// TODO get jar into a public repo so this will work
+@GrabResolver(name="local", root="file:/Users/noah/.m2/repository/",m2Compatible="true")
+@Grab(group='com.noahsloan.atg',module="atg-resolver",version="1.0-SNAPSHOT")
+import com.noahsloan.atg.ivy.AtgModuleRepository
 import java.io.File; 
 import java.util.List;
 
@@ -13,12 +17,7 @@ grails.project.dependency.resolution = {
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
 
-
-	def myCL = new URLClassLoader([new File(
-				"${basedir}/lib/atg-resolver-1.0-SNAPSHOT.jar"
-			).toURI().toURL()] as URL[],
-			org.apache.ivy.plugins.repository.AbstractRepository.classLoader)
-	resolver myCL.loadClass('com.noahsloan.atg.ivy.AtgModuleRepository').newResolver
+	resolver AtgModuleRepository.newResolver
 	
     repositories {
         grailsPlugins()
