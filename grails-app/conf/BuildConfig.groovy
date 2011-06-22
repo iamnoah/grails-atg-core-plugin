@@ -1,6 +1,4 @@
-// TODO get jar into a public repo so this will work
-@GrabResolver(name="local", root="file:/Users/noah/.m2/repository/",m2Compatible="true")
-@Grab(group='com.noahsloan.atg',module="atg-resolver",version="1.0-SNAPSHOT")
+@Grab(group='com.noahsloan.atg',module="atg-resolver",version="1.0")
 import com.noahsloan.atg.ivy.AtgModuleRepository
 import java.io.File; 
 import java.util.List;
